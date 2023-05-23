@@ -7,7 +7,9 @@ import scipy
 ##########  see https://github.com/Fyusion/LLFF for original
 def imread(f):
     if f.endswith('png'):
-        return imageio.imread(f, ignoregamma=True)
+        img = imageio.imread(f)
+        #print(img.shape)
+        return img
     else:
         return imageio.imread(f)
 
@@ -155,7 +157,13 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True, lo
         return poses, bds
 
 
-    imgs = imgs = [imread(f)[...,:3]/255. for f in imgfiles]
+    #imgs = imgs = [imread(f)[...,:3]/255. for f in imgfiles]
+    imgs = []
+    for f in imgfiles:
+        print(f)
+        img = imread(f)[...,:3]/255.0
+        imgs.append(img)
+
     imgs = np.stack(imgs, -1)
 
     print('Loaded image data', imgs.shape, poses[:,-1,0])

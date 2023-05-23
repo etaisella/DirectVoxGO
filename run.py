@@ -3,6 +3,7 @@ from shutil import copyfile
 from tqdm import tqdm, trange
 
 import mmcv
+import mmengine
 import imageio
 import numpy as np
 
@@ -579,7 +580,8 @@ if __name__=='__main__':
     # load setup
     parser = config_parser()
     args = parser.parse_args()
-    cfg = mmcv.Config.fromfile(args.config)
+    #cfg = mmcv.Config.fromfile(args.config)
+    cfg = mmengine.Config.fromfile(args.config)
 
     # init enviroment
     if torch.cuda.is_available():
