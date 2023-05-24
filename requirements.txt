@@ -7,4 +7,8 @@ imageio
 imageio-ffmpeg
 opencv-python
 torch_efficient_distloss
-
+scikit-image
+mmengine
+diffusers==0.11.1
+transformers==4.28.1
+accelerate==0.18.0

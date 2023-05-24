@@ -40,7 +40,14 @@ data = dict(
 '''
 coarse_train = dict(
     N_iters=5000,                 # number of optimization steps
+    N_iters_voxe=3000,            # number of optimization steps voxe
+    freq_test_voxe=200,           # frequency of output rendering
+    voxe_sds_t_start=800,        # when to start lowering max step
+    voxe_sds_t_freq=400,          # how frequently to lower max step
+    voxe_sds_t_gamma=0.75,        # by how much to decrease max step
+    voxe_DCL_weight=200.0,        # weight of DCL loss
     N_rand=8192,                  # batch size (number of random rays per optimization step)
+    N_batch_voxe=200*250,         # batch size (number of random rays per optimization step in vox-e mode)
     lrate_density=1e-1,           # lr of density voxel grid
     lrate_k0=1e-1,                # lr of color/feature voxel grid
     lrate_rgbnet=1e-3,            # lr of the mlp to preduct view-dependent color
@@ -101,6 +108,8 @@ coarse_model_and_render = dict(
     maskout_near_cam_vox=True,    # maskout grid points that between cameras and their near planes
     world_bound_scale=1,          # rescale the BBox enclosing the scene
     stepsize=0.5,                 # sampling stepsize in volume rendering
+    stepsize_voxe=1.0,            # sampling stepsize in volume rendering voxe
+    scale_factor_voxe=4.0,        # scale factor for dataset - voxe
 )
 
 fine_model_and_render = deepcopy(coarse_model_and_render)

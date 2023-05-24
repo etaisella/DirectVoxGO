@@ -13,6 +13,7 @@ import torch.nn.functional as F
 
 from lib import utils, dvgo, dcvgo, dmpigo
 from lib.load_data import load_data
+from run_voxe import train_voxe
 
 from torch_efficient_distloss import flatten_eff_distloss
 
@@ -40,6 +41,8 @@ def config_parser():
     parser.add_argument("--render_only", action='store_true',
                         help='do not optimize, reload weights and render out render_poses path')
     parser.add_argument("--render_test", action='store_true')
+    parser.add_argument("--run_voxe", action='store_true')
+    parser.add_argument("--voxe_prompt", type=str, default="none")
     parser.add_argument("--render_train", action='store_true')
     parser.add_argument("--render_video", action='store_true')
     parser.add_argument("--render_video_flipy", action='store_true')
@@ -628,8 +631,13 @@ if __name__=='__main__':
         sys.exit()
 
     # train
-    if not args.render_only:
+    if not args.render_only and not args.run_voxe:
         train(args, cfg, data_dict)
+    
+    # vox-e
+    if args.run_voxe:
+        train_voxe(args, cfg, data_dict)
+        
 
     # load model for rendring
     if args.render_test or args.render_train or args.render_video:
