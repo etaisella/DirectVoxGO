@@ -45,6 +45,7 @@ def config_parser():
     parser.add_argument("--voxe_prompt", type=str, default="none")
     parser.add_argument("--render_train", action='store_true')
     parser.add_argument("--render_video", action='store_true')
+    parser.add_argument("--render_video_voxe", action='store_true')
     parser.add_argument("--render_video_flipy", action='store_true')
     parser.add_argument("--render_video_rot90", default=0, type=int)
     parser.add_argument("--render_video_factor", type=float, default=0,
@@ -640,9 +641,11 @@ if __name__=='__main__':
         
 
     # load model for rendring
-    if args.render_test or args.render_train or args.render_video:
+    if args.render_test or args.render_train or args.render_video or args.render_video_voxe:
         if args.ft_path:
             ckpt_path = args.ft_path
+        elif args.render_video_voxe:
+            ckpt_path = os.path.join(cfg.basedir, cfg.expname, 'voxe_last.tar')
         else:
             ckpt_path = os.path.join(cfg.basedir, cfg.expname, 'fine_last.tar')
         ckpt_name = ckpt_path.split('/')[-1][:-4]
@@ -702,7 +705,7 @@ if __name__=='__main__':
         imageio.mimwrite(os.path.join(testsavedir, 'video.depth.mp4'), utils.to8b(1 - depths / np.max(depths)), fps=30, quality=8)
 
     # render video
-    if args.render_video:
+    if args.render_video or args.render_video_voxe:
         testsavedir = os.path.join(cfg.basedir, cfg.expname, f'render_video_{ckpt_name}')
         os.makedirs(testsavedir, exist_ok=True)
         print('All results are dumped into', testsavedir)
@@ -715,7 +718,10 @@ if __name__=='__main__':
                 render_video_rot90=args.render_video_rot90,
                 savedir=testsavedir, dump_images=args.dump_images,
                 **render_viewpoints_kwargs)
-        imageio.mimwrite(os.path.join(testsavedir, 'video.rgb.mp4'), utils.to8b(rgbs), fps=30, quality=8)
+        if args.render_video_voxe:
+            imageio.mimwrite(os.path.join(testsavedir, 'video_voxe.rgb.mp4'), utils.to8b(rgbs), fps=30, quality=8)
+        else:
+            imageio.mimwrite(os.path.join(testsavedir, 'video.rgb.mp4'), utils.to8b(rgbs), fps=30, quality=8)
         import matplotlib.pyplot as plt
         depths_vis = depths * (1-bgmaps) + bgmaps
         dmin, dmax = np.percentile(depths_vis[bgmaps < 0.1], q=[5, 95])

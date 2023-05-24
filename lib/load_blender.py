@@ -140,7 +140,7 @@ def load_blender_voxe(basedir, half_res=False, testskip=1):
     #focal = .5 * W / np.tan(.5 * camera_angle_x)
     focal = meta[key]["intrinsic"]["focal"]
 
-    render_poses = torch.stack([pose_spherical(angle, -30.0, 2.0) for angle in np.linspace(-180,180,160+1)[:-1]], 0)
+    render_poses = torch.stack([pose_spherical(angle, -30.0, 1.0) for angle in np.linspace(-180,180,160+1)[:-1]], 0)
 
     if half_res:
         H = H//2

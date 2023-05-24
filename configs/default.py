@@ -40,12 +40,12 @@ data = dict(
 '''
 coarse_train = dict(
     N_iters=5000,                 # number of optimization steps
-    N_iters_voxe=3000,            # number of optimization steps voxe
+    N_iters_voxe=2600,            # number of optimization steps voxe
     freq_test_voxe=200,           # frequency of output rendering
-    voxe_sds_t_start=800,        # when to start lowering max step
+    voxe_sds_t_start=1700,        # when to start lowering max step
     voxe_sds_t_freq=400,          # how frequently to lower max step
     voxe_sds_t_gamma=0.75,        # by how much to decrease max step
-    voxe_DCL_weight=200.0,        # weight of DCL loss
+    voxe_DCL_weight=400.0,        # weight of DCL loss
     N_rand=8192,                  # batch size (number of random rays per optimization step)
     N_batch_voxe=200*250,         # batch size (number of random rays per optimization step in vox-e mode)
     lrate_density=1e-1,           # lr of density voxel grid
